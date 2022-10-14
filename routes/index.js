@@ -17,7 +17,9 @@ router.get('/consumer', function(req, res, next) {
 
 
 router.get('/auth', function(req, res, next) {
-  return res.status(200).json({ uniqueId: `${++counter}-UNIQUE_ID-${Math.random()}` })
+  const data = { uniqueId: `${++counter}-UNIQUE_ID-${Math.random()}` };
+  const expireTime = 60*60*24*30;
+  return res.cookie('auth-iframe-test', encodeURIComponent(JSON.stringify(data)), { sameSite: 'none', secure: true, maxAge: expireTime }).status(200).json(data)
 });
 
 module.exports = router;

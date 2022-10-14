@@ -2,6 +2,7 @@ doctype html
 html
   head
     title= title
+
   body
     block content
 
@@ -10,3 +11,26 @@ html
 
     iframe(id='poc-iframe', title='Poc Iframe', width='300', height='300', src='http://poc-iframe-service.test')
 
+    script(type='text/javascript').
+      setTimeout(() => {
+        function messageHandler(event) {
+            console.log('DATA RETURNED FROM IFRAME:');
+            console.log(event.data);
+        }
+
+        window.addEventListener("message", messageHandler, false);
+        const iframe = document.getElementById('poc-iframe');
+
+        iframe.contentWindow.postMessage({
+          action: 'getLocalStorageData'
+        }, '*');
+
+        iframe.contentWindow.postMessage({
+          action: 'getSessionStorageData'
+        }, '*');
+
+        iframe.contentWindow.postMessage({
+          action: 'getCookieData'
+        }, '*');
+
+      }, 3000);
